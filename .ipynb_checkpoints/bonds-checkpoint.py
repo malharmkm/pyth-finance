@@ -52,3 +52,10 @@ def key_rate_dur(y, par, T, cpn, freq, dy = 0.01):
     krd = (price_min - price_max) / (2 * price * dy)
     return krd
     
+def macaulay_dur(par, y, T, cpn, freq = 2):
+    price = bond_price(par, T, y, cpn, freq)
+    n = T * freq
+    coupon = cpn / 100 * par / freq
+    dt = [(i + 1) / freq for i in range(int(n))]
+    mac_numerator = sum([(coupon * t)/(1 + y / freq) ** (freq * t) for t in dt]) + (par * n) / (1 + y / freq) ** (n)
+    return (mac_numerator / price)
