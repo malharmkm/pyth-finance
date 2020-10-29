@@ -53,3 +53,17 @@ def delta_put(S, X, T, r, sigma):
     """
     d1 = ( np.log(S/X) + (r + 0.5 * sigma ** 2) * T ) / (sigma * np.sqrt(T))
     return (-stats.norm.cdf(-d1))
+
+def binomial_call(S, X, r, T, sigma, n = 100):
+    dT = T / n
+    u = np.exp(sigma * np.sqrt(dT))
+    d = 1.0 / u
+    a = np.exp(r * dT)
+    p = (a - d) / (u - d)
+    v = [[0.0 for j in range(i+1)] for i in range(n+1)]
+    for j in range(i + 1):
+        v[n][j] = max(s * u**j * d**(n - j) - x, 0.0)
+    for i in range(n-1, -1, -1):
+        for j in range(i + 1):
+            v[i][j]=exp(-r*deltaT)*(p*v[i+1][j+1]+(1.0-p)*v[i+1][j])
+    return v[0][0]
